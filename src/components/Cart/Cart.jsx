@@ -31,14 +31,14 @@ const Cart = ({ isActive }) => {
         <div
           ref={nodeRef}
           style={{ ...defaultStyle, ...transitionStyles[state] }}
-          className={`fixed w-screen h-screen top-[74px] z-10`}>
+          className={`fixed w-screen h-screen top-[74px] z-10 `}>
 
           {/* <div className="bg-green-950/30 fixed w-screen h-screen inset-0"></div> */}
 
-          <div className="bg-green-100 w-full lg:w-1/3 h-[calc(100vh-74px)] ml-auto p-6 font-medium lg:max-w-xs">
-            <div className="h-full flex flex-col gap-4">
+          <div className="bg-green-100 w-full lg:w-1/3 h-[calc(100vh-74px)] ml-auto p-6 font-medium lg:max-w-md overflow-scroll">
+            <div className="flex flex-col gap-8 pb-6">
               <h2 className="text-xl">My Order</h2>
-              <div>
+              <div className='flex flex-col gap-8 mb-auto'>
                 <Card />
                 <Card />
 
