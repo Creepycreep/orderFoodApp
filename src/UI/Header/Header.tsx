@@ -6,7 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 import Container from '../Container/Container';
-import Cart from '../../components/Cart/Cart';
+import CartTransition from '../../components/Cart/CartTransition';
 import Button from '../Button/Button';
 
 const Header = () => {
@@ -41,7 +41,7 @@ const Header = () => {
         </Button>
       </Container>
 
-      <Cart isActive={isCartActive} onCartTriggerHandler={setIsCartActive} />
+      <CartTransition isActive={isCartActive} onCartTriggerHandler={setIsCartActive} />
     </header>
   )
 }
