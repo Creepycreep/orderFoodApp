@@ -13,17 +13,23 @@ const defaultStyle = {
 };
 
 const transitionStyles = {
-  entering: { transform: 'translateX(0%)', },
-  entered: { transform: 'translateX(0%)', },
-  exiting: { transform: 'translateX(100%)', },
-  exited: { transform: 'translateX(100%)', },
+  entering: { transform: 'translateX(0%)' },
+  entered: { transform: 'translateX(0%)' },
+  exiting: { transform: 'translateX(100%)' },
+  exited: { transform: 'translateX(100%)' },
+  unmounted: {}
 };
 
-const Cart = ({ isActive, onCartTriggerHandler }) => {
-  const nodeRef = useRef(null);
+type Props = {
+  isActive: boolean,
+  onCartTriggerHandler: any,
+}
+
+const Cart = ({ isActive, onCartTriggerHandler }: Props) => {
+  const nodeRef = useRef<any>(null);
   const [isChangeable, setIsChangeable] = useState(false);
 
-  const handleClick = (e) => {
+  const handleClick = (e: MouseEvent) => {
     if (nodeRef.current && !nodeRef.current.contains(e.target) && isChangeable) {
       onCartTriggerHandler()
     }
