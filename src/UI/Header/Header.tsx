@@ -2,16 +2,20 @@ import { useState } from 'react';
 
 import LocalPizzaRoundedIcon from '@mui/icons-material/LocalPizzaRounded';
 import SearchIcon from '@mui/icons-material/Search';
-import Container from '../Container/Container';
+import CloseIcon from '@mui/icons-material/Close';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+
+import Container from '../Container/Container';
 import Cart from '../../components/Cart/Cart';
+import Button from '../Button/Button';
 
 const Header = () => {
-  const [isCartActive, setIsCartActive] = useState(false)
+  const [isCartActive, setIsCartActive] = useState(false);
 
-  const onCartTriggerHadler = () => {
+  const onCartTriggerHandler = () => {
     setIsCartActive(prev => !prev)
   }
+
 
   return (
     <header className='bg-green-600 py-4 fixed w-full z-20'>
@@ -28,14 +32,16 @@ const Header = () => {
           <input className='hidden lg:block  w-full form-input p-2 pl-0 bg-transparent  border-transparent placeholder:text-green-700/50 text-green-700 focus:border-transparent focus:ring-0' type="text" placeholder='What would you like to eat today?' />
         </form>
 
-        <button
-          onClick={onCartTriggerHadler}
-          className='p-2 text-green-100 transition duration-300 hover:text-green-300'>
-          <ShoppingCartIcon />
-        </button>
+        <Button
+          type='icon'
+          onClick={onCartTriggerHandler}
+          color='text-green-100 hover:text-green-300'
+        >
+          {isCartActive ? <CloseIcon /> : <ShoppingCartIcon />}
+        </Button>
       </Container>
 
-      <Cart isActive={isCartActive} />
+      <Cart isActive={isCartActive} onCartTriggerHandler={setIsCartActive} />
     </header>
   )
 }

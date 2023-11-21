@@ -1,5 +1,6 @@
 import Counter from "../../UI/Counter/Counter";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import Button from "../Button/Button";
 
 const Card = () => {
   return (
@@ -13,9 +14,14 @@ const Card = () => {
 
       <div className="w-full lg:w-auto flex lg:flex-col justify-between text-2xl items-end">
         <span>$25</span>
-        <button className="w-max leading-[40px] text-2xl">
+        <Button
+          type='icon'
+          color='text-green-800 hover:text-green-600'
+          pad='p-0'
+        >
           <DeleteOutlinedIcon sx={{ fontSize: 28 }} />
-        </button>
+        </Button>
+
       </div>
     </div>
   )
