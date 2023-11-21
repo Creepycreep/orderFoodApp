@@ -35,15 +35,17 @@ const Cart = ({ isActive }) => {
 
           {/* <div className="bg-green-950/30 fixed w-screen h-screen inset-0"></div> */}
 
-          <div className="bg-green-100 w-full lg:w-1/3 h-[calc(100vh-74px)] ml-auto p-6 font-medium lg:max-w-md overflow-scroll">
-            <div className="flex flex-col gap-8 pb-6">
-              <h2 className="text-xl">My Order</h2>
-              <div className='flex flex-col gap-8 mb-auto'>
-                <Card />
-                <Card />
+          <div className="bg-green-100 w-full lg:w-1/3 h-[calc(100vh-74px)] ml-auto p-6 pb-0 font-medium lg:max-w-md overflow-x-auto">
+            <div className='h-full flex flex-col'>
+              <div className="grow flex flex-col gap-8 pb-6">
+                <h2 className="text-xl">My Order</h2>
+                <div className='flex flex-col gap-8 mb-auto'>
+                  <Card />
+                  <Card />
 
+                </div>
+                <Button />
               </div>
-              <Button />
             </div>
           </div>
         </div>
