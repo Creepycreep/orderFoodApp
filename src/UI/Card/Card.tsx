@@ -1,4 +1,4 @@
-import Counter from "../../UI/Counter/Counter";
+import Counter from "../Counter/Counter";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import Button from "../Button/Button";
 
