@@ -1,7 +1,8 @@
 import { Transition } from 'react-transition-group';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
+import { useClickOusideHandler } from '../../hooks/useClickOusideHandler';
 import Card from "../../UI/Card/Card";
 import Button from "../../UI/Button/Button"
 
@@ -29,19 +30,7 @@ const Cart = ({ isActive, onCartTriggerHandler }: Props) => {
   const nodeRef = useRef<any>(null);
   const [isChangeable, setIsChangeable] = useState(false);
 
-  const handleClick = (e: MouseEvent) => {
-    if (nodeRef.current && !nodeRef.current.contains(e.target) && isChangeable) {
-      onCartTriggerHandler()
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener("click", handleClick);
-
-    return () => {
-      document.removeEventListener("click", handleClick);
-    };
-  })
+  useClickOusideHandler(nodeRef, isChangeable, onCartTriggerHandler)
 
   return (
     <Transition
