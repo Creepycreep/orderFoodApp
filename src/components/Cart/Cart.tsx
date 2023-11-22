@@ -1,51 +1,82 @@
-import { useRef, useEffect } from 'react';
+import { Transition } from 'react-transition-group';
+import { useState, useRef, useEffect } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import Card from "../../UI/Card/Card";
 import Button from "../../UI/Button/Button"
 
+const duration = 700;
+
+const defaultStyle = {
+  transition: `transform ${duration}ms ease`,
+  transform: 'translateX:100%',
+};
+
+const transitionStyles = {
+  entering: { transform: 'translateX(0%)' },
+  entered: { transform: 'translateX(0%)' },
+  exiting: { transform: 'translateX(100%)' },
+  exited: { transform: 'translateX(100%)' },
+  unmounted: {}
+};
+
 type Props = {
-  onCartTriggerHandler: (state: boolean) => void,
+  isActive: boolean,
+  onCartTriggerHandler: any,
 }
 
-const Cart = ({ onCartTriggerHandler }: Props) => {
+const Cart = ({ isActive, onCartTriggerHandler }: Props) => {
   const nodeRef = useRef<any>(null);
+  const [isChangeable, setIsChangeable] = useState(false);
 
-
-  const handleClick = (e: MouseEvent, ref: React.MutableRefObject<any>) => {
-    if (ref.current && !ref.current.contains(e.target)) {
-      onCartTriggerHandler(false)
+  const handleClick = (e: MouseEvent) => {
+    if (nodeRef.current && !nodeRef.current.contains(e.target) && isChangeable) {
+      onCartTriggerHandler()
     }
   }
 
   useEffect(() => {
-    document.addEventListener("click", event => handleClick(event, nodeRef));
+    document.addEventListener("click", handleClick);
 
     return () => {
-      document.removeEventListener("click", event => handleClick(event, nodeRef));
+      document.removeEventListener("click", handleClick);
     };
   })
 
   return (
-    <div
-      className="bg-green-100 top-[74px] right-0 fixed w-full lg:w-1/3 h-[calc(100vh-74px)] p-6 pb-0 font-medium lg:max-w-md overflow-x-auto">
-      <div className='h-full flex flex-col'>
-        <div className="grow flex flex-col gap-8 pb-6">
-          <h2 className="text-xl font-semibold">My Order</h2>
-          <div className='flex flex-col gap-8 mb-auto'>
-            <Card />
-            <Card />
+    <Transition
+      nodeRef={nodeRef}
+      in={isActive}
+      unmountOnExit={true}
+      timeout={duration}
+      onEntered={() => setIsChangeable(true)}
+      onExited={() => setIsChangeable(false)}>
 
+      {(state) => (
+        <div
+          ref={nodeRef}
+          style={{ ...defaultStyle, ...transitionStyles[state] }}
+          className="bg-green-100 top-[74px] right-0 fixed w-full lg:w-1/3 h-[calc(100vh-74px)] p-6 pb-0 font-medium lg:max-w-md overflow-x-auto">
+          <div className='h-full flex flex-col'>
+            <div className="grow flex flex-col gap-8 pb-6">
+              <h2 className="text-xl font-semibold">My Order</h2>
+              <div className='flex flex-col gap-8 mb-auto'>
+                <Card />
+                <Card />
+
+              </div>
+              <Button
+                pad='px-4 py-2'
+              >
+                Order
+                <ArrowForwardIcon />
+              </Button>
+            </div>
           </div>
-          <Button
-            pad='px-4 py-2'
-          >
-            Order
-            <ArrowForwardIcon />
-          </Button>
         </div>
-      </div>
-    </div>
+      )
+      }
+    </Transition >
   )
 }
 
