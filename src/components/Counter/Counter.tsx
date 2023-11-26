@@ -21,19 +21,19 @@ const Counter = () => {
   }
 
   return (
-    <div className="shrink-0 border border-green-800/50 rounded-lg w-max text-2xl  text-green-800 flex items-center overflow-hidden">
+    <div className="shrink-0 border border-green-800/50 rounded-lg w-max text-xl  text-green-800 flex items-center overflow-hidden">
       <button
         onClick={() => onClickHandler(-1)}
-        className="p-2 active:bg-green-200 hover:bg-green-200/80 transition-colors duration-300 leading-none  disabled:text-green-800/50 disabled:bg-transparent"
+        className="p-2 active:bg-green-300/60 hover:bg-green-200/80 transition-colors duration-300 leading-none  disabled:text-green-800/50 disabled:bg-transparent"
         disabled={isDisabledMin}
       >-</button >
 
-      <span className="p-2 text-xl leading-none min-w-[36px] text-center">{amount}</span>
+      <span className="p-2 text-lg leading-none min-w-[36px] text-center">{amount}</span>
 
       <button
         onClick={() => onClickHandler(1)}
         className="p-2 hover:bg-green-200/80 
-      active:bg-green-200 transition-colors duration-300 leading-none disabled:text-green-800/50 disabled:bg-transparent"
+      active:bg-green-300/60 transition-colors duration-300 leading-none disabled:text-green-800/50 disabled:bg-transparent"
         disabled={isDisabledMax}
       >+</button>
     </div >

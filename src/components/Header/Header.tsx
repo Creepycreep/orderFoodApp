@@ -5,9 +5,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
-import Container from '../Container/Container';
-import Cart from '../../components/Cart/Cart';
-import Button from '../Button/Button';
+import Container from '../../view/Container/Container';
+import Cart from '../Cart/Cart';
+import Button from '../../view/Button/Button';
 
 const Header = () => {
   const [isCartActive, setIsCartActive] = useState(false);

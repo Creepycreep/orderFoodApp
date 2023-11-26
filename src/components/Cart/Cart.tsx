@@ -3,8 +3,8 @@ import { useState, useRef } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import { useClickOusideHandler } from '../../hooks/useClickOusideHandler';
-import Card from "../../UI/Card/Card";
-import Button from "../../UI/Button/Button"
+import Card from "../Card/Card";
+import Button from "../../view/Button/Button"
 
 const duration = 700;
 
@@ -45,26 +45,28 @@ const Cart = ({ isActive, onCartTriggerHandler }: Props) => {
         <div
           ref={nodeRef}
           style={{ ...defaultStyle, ...transitionStyles[state] }}
-          className="bg-green-100 top-[74px] right-0 fixed w-full lg:w-1/3 h-[calc(100vh-74px)] p-6 pb-0 font-medium lg:max-w-md overflow-x-auto">
+          className="bg-green-100 top-[74px] right-0 fixed w-full lg:w-1/3 h-[calc(100vh-74px)] p-6 pb-0 lg:max-w-md overflow-x-auto">
           <div className='h-full flex flex-col'>
             <div className="grow flex flex-col gap-8 pb-6">
               <h2 className="text-xl font-semibold">My Order</h2>
               <div className='flex flex-col gap-8 mb-auto'>
-                <Card />
-                <Card />
+                {/* <Card type='cart' /> */}
+                {/* <Card type='cart' /> */}
 
               </div>
-              <Button
-                pad='px-4 py-2'
-              >
+
+              <div className='border-t border-green-800/50 p-3 flex justify-between text-xl'>
+                <span>Total</span>
+                <span className='font-medium'>$hhjhj</span>
+              </div>
+              <Button pad='px-4 py-2'>
                 Order
                 <ArrowForwardIcon />
               </Button>
             </div>
           </div>
         </div>
-      )
-      }
+      )}
     </Transition >
   )
 }

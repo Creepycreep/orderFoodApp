@@ -1,6 +1,7 @@
-import Badge from "./UI/Badge/Badge";
-import Container from "./UI/Container/Container";
-import Header from "./UI/Header/Header";
+import Filter from './components/Filter/Filter'
+import Container from "./view/Container/Container";
+import Header from "./components/Header/Header";
+import FoodList from './components/FoodList/FoodList';
 
 function App() {
   return (
@@ -8,8 +9,10 @@ function App() {
       <Header />
 
       <main className="mt-[74px] py-[30px]">
-        <Container>
-          <Badge />
+        <Container classes='flex flex-col gap-10'>
+          <Filter />
+
+          <FoodList />
         </Container>
       </main>
     </div>
