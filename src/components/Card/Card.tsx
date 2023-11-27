@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
@@ -44,7 +44,7 @@ const Card = ({ foodData, type = '', }: Props) => {
         {
           isAdded ?
             <>
-              <Counter />
+              <Counter initialValue={1} />
               <Button
                 onClick={() => setIsAdded(false)}
                 type='icon'

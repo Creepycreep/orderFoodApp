@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react"
 
-const Counter = () => {
+const Counter = ({ initialValue = 0 }: { initialValue?: number }) => {
   const min = 0;
   const max = 20;
 
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(initialValue);
   const [isDisabledMin, setIsDisabledMin] = useState(false);
   const [isDisabledMax, setIsDisabledMax] = useState(false);
-
-
 
   useEffect(() => {
     amount === min ? setIsDisabledMin(true) : setIsDisabledMin(false)

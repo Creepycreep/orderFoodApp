@@ -1,24 +1,6 @@
-import { useState, useEffect } from 'react';
-
-import foodService from '../../service/foodService'
 import FoodBlock from '../FoodBlock/FoodBlock';
 
-const FoodList = () => {
-  const food = new foodService();
-
-  const [foodBlocks, setFoodBlock] = useState<any[]>([]);
-
-  useEffect(() => {
-    getFood();
-  }, [])
-
-  const getFood = () => {
-    food.getAllFood()
-      .then(res => {
-        setFoodBlock(res)
-      })
-  }
-
+const FoodList = ({ foodBlocks }: { foodBlocks: any[] }) => {
   return (
     <>
       {foodBlocks.map(item => {

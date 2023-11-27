@@ -6,33 +6,51 @@ import DinnerDiningOutlinedIcon from '@mui/icons-material/DinnerDiningOutlined';
 
 import Badge from "../../view/Badge/Badge"
 
-const Filter = () => {
+type Props = {
+  categories: string[],
+  setFilter: (a: string) => void,
+  selectedFilter: string,
+}
+const Filter = ({ categories, setFilter, selectedFilter }: Props) => {
   return (
     <div className='flex gap-4 flex-wrap'>
-      <Badge>
+      <Badge
+        click={() => setFilter('')}
+        isActive={selectedFilter === ''}>
         <FastfoodOutlinedIcon />
-        <span>All</span>
+        <span className='text-capitalize'>All</span>
       </Badge>
 
-      <Badge>
-        <LocalPizzaOutlinedIcon />
-        <span>Pizza</span>
-      </Badge>
-
-      <Badge>
-        <DinnerDiningOutlinedIcon />
-        <span>Salads</span>
-      </Badge>
-
-      <Badge>
-        <BakeryDiningOutlinedIcon />
-        <span>Desserts</span>
-      </Badge>
-
-      <Badge>
-        <WaterDropOutlinedIcon />
-        <span>Sauces</span>
-      </Badge>
+      {
+        categories.map(category => {
+          let icon = null;
+          switch (category) {
+            case 'pizza':
+              icon = <LocalPizzaOutlinedIcon />;
+              break;
+            case 'salads':
+              icon = <DinnerDiningOutlinedIcon />;
+              break;
+            case 'dessert':
+              icon = <BakeryDiningOutlinedIcon />;
+              break;
+            case 'drinks':
+              icon = <WaterDropOutlinedIcon />;
+              break;
+            default:
+              icon = <FastfoodOutlinedIcon />;
+          }
+          return (
+            <Badge
+              click={() => setFilter(category)}
+              key={category}
+              isActive={selectedFilter === category}>
+              {icon}
+              <span className='capitalize'>{category}</span>
+            </Badge>
+          )
+        })
+      }
     </div>
   )
 }
