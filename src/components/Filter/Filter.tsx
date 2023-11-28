@@ -8,7 +8,7 @@ import Badge from "../../view/Badge/Badge"
 
 type Props = {
   categories: string[],
-  setFilter: (a: string) => void,
+  setFilter: React.Dispatch<React.SetStateAction<any>>,
   selectedFilter: string,
 }
 const Filter = ({ categories, setFilter, selectedFilter }: Props) => {

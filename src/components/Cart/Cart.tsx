@@ -1,5 +1,5 @@
+import { useState, useEffect, useRef } from 'react';
 import { Transition } from 'react-transition-group';
-import { useState, useRef } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import { useClickOusideHandler } from '../../hooks/useClickOusideHandler';

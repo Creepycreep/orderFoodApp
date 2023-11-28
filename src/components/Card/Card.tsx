@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
@@ -7,22 +7,64 @@ import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
 
 import Counter from "../Counter/Counter";
 import Button from "../../view/Button/Button";
+import { Category } from '@mui/icons-material';
 
 type Props = {
   foodData: {
+    id: number,
     title: string,
     price: number,
     spicy: boolean,
     veg: boolean,
     image: string,
+    category: string,
   },
+  onChooseFood: React.Dispatch<React.SetStateAction<any[]>>,
   type?: string
 }
 
-const Card = ({ foodData, type = '', }: Props) => {
-  const { title, price, spicy, veg, image } = foodData;
+const Card = ({ foodData, onChooseFood, type = '', }: Props) => {
+  const { title, price, spicy, veg, image, category, id } = foodData;
 
   const [isAdded, setIsAdded] = useState(false);
+  const [amount, setAmount] = useState(0);
+
+  useEffect(() => {
+    amount > 0 ? setIsAdded(true) : setIsAdded(false);
+    if (amount && isAdded) {
+      onChooseFood(state => {
+        return [
+          ...state,
+          {
+            category: category,
+            id: foodData.id,
+            amount: amount
+          }
+        ]
+      })
+    }
+
+    if (!amount && !isAdded) {
+      onChooseFood(state => {
+        return state.filter(item => {
+          if (item.category !== category || item.id !== id) {
+            return item;
+          }
+        })
+      })
+    }
+  }, [amount, isAdded]);
+
+  const onRemoveHandler = () => {
+    setAmount(0);
+    // onChooseFood(state => {
+    //   return state.filter(item => {
+    //     if (item.category !== category || item.id !== id) {
+    //       return item;
+    //     }
+    //   })
+    // })
+  }
 
   return (
     <div className={`flex flex-col relative items-center flex-nowrap gap-4 text-green-800 ${type === 'cart' ? 'lg:flex-row lg:items-stretch' : ''}`}>
@@ -44,9 +86,9 @@ const Card = ({ foodData, type = '', }: Props) => {
         {
           isAdded ?
             <>
-              <Counter initialValue={1} />
+              <Counter value={amount} setAmountFood={setAmount} />
               <Button
-                onClick={() => setIsAdded(false)}
+                onClick={onRemoveHandler}
                 type='icon'
                 color='text-green-800 hover:text-green-600'
                 pad='p-0'
@@ -57,7 +99,7 @@ const Card = ({ foodData, type = '', }: Props) => {
             :
             <>
               <Button
-                onClick={() => setIsAdded(true)}
+                onClick={() => setAmount(1)}
                 pad='px-4 py-2'>
                 Order
                 <ShoppingCartIcon />

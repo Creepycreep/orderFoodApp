@@ -11,6 +11,7 @@ function App() {
   const food = new foodService();
   const [foodData, setFoodBlock] = useState<any[]>([]);
   const [filter, setFilter] = useState('');
+  const [orderList, setOrderList] = useState<any[]>([]);
 
   useEffect(() => {
     getFood();
@@ -27,7 +28,7 @@ function App() {
 
   return (
     <div className="App w-full flex flex-col gap-8">
-      <Header />
+      <Header orderList={orderList} />
 
       <main className="mt-[74px] py-[30px]">
         <Container classes='flex flex-col gap-10'>
@@ -37,7 +38,9 @@ function App() {
             categories={foodData.map(item => item.category)}
           />
 
-          <FoodList foodBlocks={filteredData} />
+          <FoodList
+            foodBlocks={filteredData}
+            onChooseFood={setOrderList} />
         </Container>
       </main>
     </div>

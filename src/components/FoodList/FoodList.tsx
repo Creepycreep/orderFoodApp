@@ -1,10 +1,18 @@
 import FoodBlock from '../FoodBlock/FoodBlock';
 
-const FoodList = ({ foodBlocks }: { foodBlocks: any[] }) => {
+type Props = {
+  foodBlocks: any[],
+  onChooseFood: React.Dispatch<React.SetStateAction<any>>,
+}
+
+const FoodList = ({ foodBlocks, onChooseFood }: Props) => {
   return (
     <>
       {foodBlocks.map(item => {
-        return <FoodBlock key={item.category} foodData={item} />
+        return <FoodBlock
+          key={item.category}
+          foodData={item}
+          onChooseFood={onChooseFood} />
       })}
     </>
   )

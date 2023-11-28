@@ -6,11 +6,12 @@ import List from '../../view/List/List';
 type Props = {
   foodData: {
     category: string,
-    foodList: any[]
-  }
+    foodList: any[],
+  },
+  onChooseFood: React.Dispatch<React.SetStateAction<any>>,
 }
 
-const FoodBlock = ({ foodData }: Props) => {
+const FoodBlock = ({ foodData, onChooseFood }: Props) => {
   const [foodList, setFoodList] = useState<any[]>([]);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const FoodBlock = ({ foodData }: Props) => {
         spicy: item.spicy,
         veg: item.vegetarian,
         image: item.image,
+        category: foodData.category
       }
     }));
   }, [foodData])
@@ -35,6 +37,7 @@ const FoodBlock = ({ foodData }: Props) => {
           return <Card
             key={item.id}
             foodData={item}
+            onChooseFood={onChooseFood}
           />
         })}
       </List>

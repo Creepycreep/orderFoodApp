@@ -1,5 +1,4 @@
 import { ReactNode } from 'react'
-import { useState, useEffect } from 'react';
 
 type childrenProps = {
   children?: ReactNode,
