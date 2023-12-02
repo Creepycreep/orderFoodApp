@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useContext, useEffect } from 'react';
 import { Transition } from 'react-transition-group';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import { useClickOusideHandler } from '../../hooks/useClickOusideHandler';
 import Card from "../Card/Card";
 import Button from "../../view/Button/Button"
+import Order from '../../context/CartContext';
 
 const duration = 700;
 
@@ -31,6 +32,16 @@ const Cart = ({ isActive, onCartTriggerHandler }: Props) => {
   const [isChangeable, setIsChangeable] = useState(false);
 
   useClickOusideHandler(nodeRef, isChangeable, onCartTriggerHandler)
+  const { orderList, setOrderList } = useContext(Order);
+  const [priceTotal, setPriceTotal] = useState(0);
+
+  useEffect(() => {
+    setPriceTotal(
+      orderList.reduce((acc: any, sum: any) => {
+        return acc + sum.price * sum.amount;
+      }, 0)
+    )
+  }, [orderList]);
 
   return (
     <Transition
@@ -50,14 +61,20 @@ const Cart = ({ isActive, onCartTriggerHandler }: Props) => {
             <div className="grow flex flex-col gap-8 pb-6">
               <h2 className="text-xl font-semibold">My Order</h2>
               <div className='flex flex-col gap-8 mb-auto'>
-                {/* <Card type='cart' /> */}
-                {/* <Card type='cart' /> */}
-
+                {orderList.map((item: { id: number; amount: number, title: string; price: number; image: string; category: string; }) => {
+                  return <Card
+                    key={`${item.category}:${item.id}`}
+                    foodData={item}
+                    addItem={setOrderList}
+                    type='cart'
+                    amountInit={item.amount}
+                  />
+                })}
               </div>
 
               <div className='border-t border-green-800/50 p-3 flex justify-between text-xl'>
                 <span>Total</span>
-                <span className='font-medium'>$hhjhj</span>
+                <span className='font-medium'>${priceTotal}</span>
               </div>
               <Button pad='px-4 py-2'>
                 Order

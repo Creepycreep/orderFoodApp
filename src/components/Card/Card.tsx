@@ -1,73 +1,92 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import LocalFireDepartmentOutlinedIcon from '@mui/icons-material/LocalFireDepartmentOutlined';
 import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
+import Order from '../../context/CartContext';
 
 import Counter from "../Counter/Counter";
 import Button from "../../view/Button/Button";
-import { Category } from '@mui/icons-material';
 
 type Props = {
   foodData: {
     id: number,
     title: string,
     price: number,
-    spicy: boolean,
-    veg: boolean,
+    spicy?: boolean,
+    veg?: boolean,
     image: string,
     category: string,
   },
-  onChooseFood: React.Dispatch<React.SetStateAction<any[]>>,
-  type?: string
+  type?: string,
+  amountInit?: number,
+  addItem: React.Dispatch<React.SetStateAction<any[]>>
 }
 
-const Card = ({ foodData, onChooseFood, type = '', }: Props) => {
+const Card = ({ foodData, addItem, type = '', amountInit = 0 }: Props) => {
   const { title, price, spicy, veg, image, category, id } = foodData;
+  const { orderList } = useContext(Order);
 
-  const [isAdded, setIsAdded] = useState(false);
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(amountInit);
+  const [priceTotal, setPriceTotal] = useState(price);
 
   useEffect(() => {
-    amount > 0 ? setIsAdded(true) : setIsAdded(false);
-    if (amount && isAdded) {
-      onChooseFood(state => {
+    if (amount > 0) {
+      addItem((state: any) => {
+        const newState = state.filter((item: { id: number; category: string; }) => {
+          if (!(item.id === id && item.category === category)) {
+            return item
+          }
+        });
+
         return [
-          ...state,
+          ...newState,
           {
             category: category,
             id: foodData.id,
-            amount: amount
+            amount: amount,
+            title: title,
+            image: image,
+            price: price,
           }
         ]
       })
-    }
-
-    if (!amount && !isAdded) {
-      onChooseFood(state => {
-        return state.filter(item => {
-          if (item.category !== category || item.id !== id) {
-            return item;
-          }
-        })
+      setPriceTotal(price * amount)
+    } else {
+      addItem((state: any) => {
+        return state.filter((item: { id: number; category: string; }) => !(item.id === id && item.category === category))
       })
+      setPriceTotal(price)
     }
-  }, [amount, isAdded]);
 
-  const onRemoveHandler = () => {
-    setAmount(0);
-    // onChooseFood(state => {
-    //   return state.filter(item => {
-    //     if (item.category !== category || item.id !== id) {
-    //       return item;
-    //     }
-    //   })
-    // })
-  }
+  }, [amount]);
+
+  useEffect(() => {
+    const cacheAmount = orderList.reduce((acc: any, sum: { id: number; category: string; amount: number }) => {
+      if (sum.id === id && sum.category === category) {
+        return sum.amount
+      }
+
+      return acc;
+    }, 0);
+
+    setAmount(state => {
+      if (!cacheAmount) {
+        return 0;
+      }
+
+      if (cacheAmount !== state) {
+        return cacheAmount;
+      } else {
+        return amount;
+      }
+    })
+
+  }, [orderList]);
 
   return (
-    <div className={`flex flex-col relative items-center flex-nowrap gap-4 text-green-800 ${type === 'cart' ? 'lg:flex-row lg:items-stretch' : ''}`}>
+    <div className={`flex flex-col relative items-center flex-nowrap gap-4 text-green-800 ${type === 'cart' ? 'lg:flex-row lg:items-stretch w-full lg:min-h-[88px]' : ''}`}>
       <div className='absolute flex flex-col left-0 top-0'>
         {spicy ? <LocalFireDepartmentOutlinedIcon sx={{ color: '#dc2626' }} /> : null}
         {veg ? <SpaOutlinedIcon /> : null}
@@ -77,18 +96,18 @@ const Card = ({ foodData, onChooseFood, type = '', }: Props) => {
         <img className="w-full h-full object-contain" src={image} alt={title} />
       </div>
 
-      <div className={`w-full flex flex-col gap-4 justify-between items-center ${type === 'cart' ? 'lg:items-start lg:w-auto ' : 'sm:flex-row grow'} `}>
+      <div className={`w-full flex flex-col gap-4 justify-between items-center ${type === 'cart' ? 'break-all lg:items-start lg:w-auto ' : 'sm:flex-row grow'} `}>
         <span className="line-clamp-2 mb-auto text-center sm:text-left">{title}</span>
-        <span>${price}</span>
+        <span>${priceTotal}</span>
       </div>
 
-      <div className={`w-full flex justify-between font-medium ${type === 'cart' ? 'items-end lg:w-auto lg:flex-col' : 'items-center min-h-[44px]'}`}>
+      <div className={`w-full flex justify-between font-medium ${type === 'cart' ? 'lg:grow items-end lg:w-auto lg:flex-col' : 'items-center min-h-[44px]'}`}>
         {
-          isAdded ?
+          amount ?
             <>
               <Counter value={amount} setAmountFood={setAmount} />
               <Button
-                onClick={onRemoveHandler}
+                onClick={() => setAmount(0)}
                 type='icon'
                 color='text-green-800 hover:text-green-600'
                 pad='p-0'

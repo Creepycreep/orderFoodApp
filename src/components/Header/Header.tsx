@@ -9,11 +9,7 @@ import Container from '../../view/Container/Container';
 import Cart from '../Cart/Cart';
 import Button from '../../view/Button/Button';
 
-type Props = {
-  orderList: any[]
-}
-
-const Header = ({ orderList }: Props) => {
+const Header = () => {
   const [isCartActive, setIsCartActive] = useState(false);
 
   const onCartTriggerHandler = () => {
