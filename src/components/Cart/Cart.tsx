@@ -43,6 +43,11 @@ const Cart = ({ isActive, onCartTriggerHandler }: Props) => {
     )
   }, [orderList]);
 
+  const submitOrder = () => {
+    let formData = new FormData();
+    formData.append('order', orderList)
+  }
+
   return (
     <Transition
       nodeRef={nodeRef}
@@ -76,7 +81,7 @@ const Cart = ({ isActive, onCartTriggerHandler }: Props) => {
                 <span>Total</span>
                 <span className='font-medium'>${priceTotal}</span>
               </div>
-              <Button pad='px-4 py-2'>
+              <Button onClick={submitOrder} pad='px-4 py-2'>
                 Order
                 <ArrowForwardIcon />
               </Button>
