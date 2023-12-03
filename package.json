@@ -2,6 +2,7 @@
   "name": "pizzaria",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://creepycreep.github.io/orderFoodApp",
   "dependencies": {
     "@mui/icons-material": "^5.14.18",
     "@testing-library/jest-dom": "^5.17.0",

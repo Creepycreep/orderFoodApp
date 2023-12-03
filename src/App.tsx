@@ -7,12 +7,17 @@ import Container from "./view/Container/Container";
 import Header from "./components/Header/Header";
 import FoodList from './components/FoodList/FoodList';
 import Order from './context/CartContext';
+import Spinner from './components/Spinner/Spinner';
+
 
 function App() {
   const food = new foodService();
-  const [foodData, setFoodBlock] = useState<any[]>([]);
+  const [foodData, setFoodData] = useState<any[]>([]);
   const [filter, setFilter] = useState('');
   const [orderList, setOrderList] = useState<any[]>([]);
+
+  const [isLoading, setIsLoading] = useState(true);
+
 
   const order = useMemo(() => ({ orderList, setOrderList }), [orderList]);
 
@@ -21,9 +26,11 @@ function App() {
   }, [])
 
   const getFood = () => {
+    setIsLoading(true);
     food.getAllFood()
       .then(res => {
-        setFoodBlock(res)
+        setIsLoading(false);
+        setFoodData(res);
       })
   }
 
@@ -42,9 +49,9 @@ function App() {
               categories={foodData.map(item => item.category)}
             />
 
-            <FoodList
+            {isLoading ? <Spinner /> : <FoodList
               foodBlocks={filteredData}
-            />
+            />}
           </Container>
         </main>
       </Order.Provider>
