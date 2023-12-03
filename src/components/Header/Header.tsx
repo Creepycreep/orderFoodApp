@@ -10,9 +10,11 @@ import Cart from '../Cart/Cart';
 import Button from '../../view/Button/Button';
 import Order from '../../context/CartContext';
 
-const Header = () => {
+const Header = ({ setSeachFilter }: { setSeachFilter: React.Dispatch<React.SetStateAction<string>> }) => {
+
   const [isCartActive, setIsCartActive] = useState(false);
   const [orderAmount, setOrderAmount] = useState(0);
+  const [searchValue, setSearchValue] = useState('');
 
   const { orderList } = useContext(Order);
 
@@ -20,10 +22,17 @@ const Header = () => {
     setOrderAmount(orderList.length)
   }, [orderList])
 
+  useEffect(() => {
+    setSeachFilter(searchValue)
+  }, [searchValue])
+
   const onCartTriggerHandler = () => {
     setIsCartActive(prev => !prev)
   }
 
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  }
 
   return (
     <header className='bg-green-600 py-4 fixed w-full z-20'>
@@ -33,11 +42,16 @@ const Header = () => {
           PizzaYummy
         </div>
 
-        <form className=" lg:w-1/2 search flex lg:bg-green-100 rounded-xl lg:mr-4">
-          <button className='text-green-100 lg:text-green-700 bg-transparent p-2'>
+        <form onSubmit={(e) => { e.preventDefault() }} className=" lg:w-1/2 search flex lg:bg-green-100 rounded-xl lg:mr-4">
+          <button className='hidden lg:block text-green-100 lg:text-green-700 bg-transparent p-2'>
             <SearchIcon />
           </button>
-          <input className='hidden lg:block  w-full form-input p-2 pl-0 bg-transparent  border-transparent placeholder:text-green-700/50 text-green-700 focus:border-transparent focus:ring-0' type="text" placeholder='What would you like to eat today?' />
+          <input
+            onChange={onChangeHandler}
+            value={searchValue}
+            className='hidden lg:block  w-full form-input p-2 pl-0 bg-transparent  border-transparent placeholder:text-green-700/50 text-green-700 focus:border-transparent focus:ring-0'
+            type="text"
+            placeholder='What would you like to eat today?' />
         </form>
 
         <Button
