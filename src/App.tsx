@@ -8,17 +8,19 @@ import Header from "./components/Header/Header";
 import FoodList from './components/FoodList/FoodList';
 import Order from './context/CartContext';
 import Spinner from './components/Spinner/Spinner';
+import CartStore from './components/Cart/CartStore';
 
 function App() {
   const food = new foodService();
   const [foodData, setFoodData] = useState<any[]>([]);
   const [filter, setFilter] = useState('');
-  const [orderList, setOrderList] = useState<any[]>([]);
+  // const [orderList, setOrderList] = useState<any[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [seachFilter, setSeachFilter] = useState('');
 
-  const order = useMemo(() => ({ orderList, setOrderList }), [orderList]);
+  // const order = useMemo(() => ({ orderList, setOrderList }), [orderList]);
+  // const cartStore = new CartStore;
 
   useEffect(() => {
     getFood();
@@ -47,7 +49,7 @@ function App() {
 
   return (
     <div className="App w-full flex flex-col gap-8">
-      <Order.Provider value={order}>
+      <Order.Provider value={new CartStore()}>
         <Header setSeachFilter={setSeachFilter} />
 
         <main className="mt-[74px] py-[30px]">

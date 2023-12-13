@@ -16,11 +16,11 @@ const Header = ({ setSeachFilter }: { setSeachFilter: React.Dispatch<React.SetSt
   const [orderAmount, setOrderAmount] = useState(0);
   const [searchValue, setSearchValue] = useState('');
 
-  const { orderList } = useContext(Order);
+  const { cartStore } = useContext(Order);
 
-  useEffect(() => {
-    setOrderAmount(orderList.length)
-  }, [orderList])
+  // useEffect(() => {
+  //   setOrderAmount(cartStore.cartList.length)
+  // }, [orderList])
 
   useEffect(() => {
     setSeachFilter(searchValue)
