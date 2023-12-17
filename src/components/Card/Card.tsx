@@ -21,8 +21,6 @@ const Card = ({ product, type = '' }: Props) => {
   const { title, price, spicy, veg, image, amount } = product;
 
   const cartStore = useContext(Order);
-
-  const [amountFood, setAmount] = useState(amount);
   const [priceTotal, setPriceTotal] = useState(price);
 
   useEffect(() => {
