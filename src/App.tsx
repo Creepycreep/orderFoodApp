@@ -2,7 +2,7 @@ import CartStore from './components/store/store';
 
 import Filter from './components/Filter/Filter'
 import Container from "./view/Container/Container";
-import Header from "./components/H eader/Header";
+import Header from "./components/Header/Header";
 import FoodList from './components/FoodList/FoodList';
 import Order from './context/CartContext';
 
