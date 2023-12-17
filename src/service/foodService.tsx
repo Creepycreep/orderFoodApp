@@ -12,13 +12,31 @@ class foodService {
   }
 
   _transformData = (res: any) => {
-    const data = Object.keys(res).map((category: string) => {
+    const data = Object.keys(res).map(category => {
+      const transformedList = res[category].map((item: any) => {
+        return this._transformFoodItem(item, category);
+      })
+
       return {
-        category: category,
-        foodList: res[category]
+        category,
+        foodList: transformedList
       }
-    })
+    });
+
     return data;
+  }
+
+  _transformFoodItem = (item: any, category: string) => {
+    return {
+      category: category,
+      id: item.id,
+      amount: 0,
+      title: item.name,
+      image: item.image,
+      price: item.price,
+      veg: item.vegetarian,
+      spicy: item.spicy
+    }
   }
 
 }

@@ -6,8 +6,10 @@ export interface Product {
   veg?: boolean,
   image: string,
   category: string,
+  amount: number,
 }
 
-export interface InCartProduct extends Product {
-  amount: number,
+export interface ProductList {
+  category: string,
+  foodList: Array<Product>,
 }

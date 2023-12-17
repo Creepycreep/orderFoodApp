@@ -8,75 +8,42 @@ import Order from '../../context/CartContext';
 
 import Counter from "../Counter/Counter";
 import Button from "../../view/Button/Button";
-import { InCartProduct } from '../interfaces/product';
+import { Product } from '../interfaces/product';
 
 type Props = {
-  product: InCartProduct,
+  product: Product,
   type?: string,
   amountInit?: number,
 }
 
 const Card = ({ product, type = '' }: Props) => {
-  const { title, price, spicy, veg, image, category, id, amount } = product;
+  const { title, price, spicy, veg, image, amount } = product;
 
-  const { cartStore } = useContext(Order);
+  const cartStore = useContext(Order);
 
-  // const [amount, setAmount] = useState(amountInit);
+  const [amountFood, setAmount] = useState(amount);
   const [priceTotal, setPriceTotal] = useState(price);
 
-  // useEffect(() => {
-  //   if (amount > 0) {
-  //     addItem((state: any) => {
-  //       const newState = state.filter((item: { id: number; category: string; }) => {
-  //         if (!(item.id === id && item.category === category)) {
-  //           return item
-  //         }
-  //       });
+  useEffect(() => {
+    if (amountFood > 0) {
+      setPriceTotal(price * amountFood)
+    }
+  }, [amountFood])
 
-  //       return [
-  //         ...newState,
-  //         {
-  //           category: category,
-  //           id: foodData.id,
-  //           amount: amount,
-  //           title: title,
-  //           image: image,
-  //           price: price,
-  //         }
-  //       ]
-  //     })
-  //     setPriceTotal(price * amount)
-  //   } else {
-  //     addItem((state: any) => {
-  //       return state.filter((item: { id: number; category: string; }) => !(item.id === id && item.category === category))
-  //     })
-  //     setPriceTotal(price)
-  //   }
+  const add = () => {
+    setAmount(1)
+    cartStore.addInCart({ ...product, amount: 1 })
+  }
 
-  // }, [amount]);
+  const update = (a: number) => {
+    setAmount(a)
+    cartStore.updateCart({ ...product, amount: a })
+  }
 
-  // useEffect(() => {
-  //   const cacheAmount = orderList.reduce((acc: any, sum: { id: number; category: string; amount: number }) => {
-  //     if (sum.id === id && sum.category === category) {
-  //       return sum.amount
-  //     }
-
-  //     return acc;
-  //   }, 0);
-
-  //   setAmount(state => {
-  //     if (!cacheAmount) {
-  //       return 0;
-  //     }
-
-  //     if (cacheAmount !== state) {
-  //       return cacheAmount;
-  //     } else {
-  //       return amount;
-  //     }
-  //   })
-
-  // }, [orderList]);
+  const remove = () => {
+    setAmount(0)
+    cartStore.removeOutCart({ ...product, amount: 0 })
+  }
 
   return (
     <div className={`flex flex-col relative items-center flex-nowrap gap-4 text-green-800 ${type === 'cart' ? 'lg:flex-row lg:items-stretch w-full lg:min-h-[88px]' : ''}`}>
@@ -96,13 +63,18 @@ const Card = ({ product, type = '' }: Props) => {
 
       <div className={`w-full flex justify-between font-medium ${type === 'cart' ? 'lg:grow items-end lg:w-auto lg:flex-col' : 'items-center min-h-[44px]'}`}>
         {
-          amount ?
+          amountFood ?
             <>
-              <Counter value={amount} />
+              <Counter
+                value={amountFood}
+                updateAmountFood={update}
+                removeAmountFood={remove}
+              />
               <Button
                 type='icon'
                 color='text-green-800 hover:text-green-600'
                 pad='p-0'
+                onClick={remove}
               >
                 <DeleteOutlinedIcon sx={{ fontSize: 28 }} />
               </Button>
@@ -110,6 +82,7 @@ const Card = ({ product, type = '' }: Props) => {
             :
             <>
               <Button
+                onClick={add}
                 pad='px-4 py-2'>
                 Order
                 <ShoppingCartIcon />

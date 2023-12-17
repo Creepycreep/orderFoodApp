@@ -1,4 +1,5 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
+import { observer } from "mobx-react-lite"
 
 import LocalPizzaRoundedIcon from '@mui/icons-material/LocalPizzaRounded';
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,28 +11,17 @@ import Cart from '../Cart/Cart';
 import Button from '../../view/Button/Button';
 import Order from '../../context/CartContext';
 
-const Header = ({ setSeachFilter }: { setSeachFilter: React.Dispatch<React.SetStateAction<string>> }) => {
+const Header = () => {
 
   const [isCartActive, setIsCartActive] = useState(false);
-  const [orderAmount, setOrderAmount] = useState(0);
-  const [searchValue, setSearchValue] = useState('');
-
-  const { cartStore } = useContext(Order);
-
-  // useEffect(() => {
-  //   setOrderAmount(cartStore.cartList.length)
-  // }, [orderList])
-
-  useEffect(() => {
-    setSeachFilter(searchValue)
-  }, [searchValue])
+  const cartStore = useContext(Order);
 
   const onCartTriggerHandler = () => {
     setIsCartActive(prev => !prev)
   }
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
+    cartStore.updateSearchFilter(e.target.value);
   }
 
   return (
@@ -48,7 +38,7 @@ const Header = ({ setSeachFilter }: { setSeachFilter: React.Dispatch<React.SetSt
           </button>
           <input
             onChange={onChangeHandler}
-            value={searchValue}
+            value={cartStore.searchFilter}
             className='hidden lg:block  w-full form-input p-2 pl-0 bg-transparent  border-transparent placeholder:text-green-700/50 text-green-700 focus:border-transparent focus:ring-0'
             type="text"
             placeholder='What would you like to eat today?' />
@@ -60,7 +50,7 @@ const Header = ({ setSeachFilter }: { setSeachFilter: React.Dispatch<React.SetSt
           color='text-green-100 hover:text-green-300 relative'
         >
           {isCartActive ? <CloseIcon /> : <ShoppingCartIcon />}
-          {orderAmount ? <AmountView amount={orderAmount} /> : null}
+          {cartStore.cartList.length ? <AmountView amount={cartStore.cartList.length} /> : null}
         </Button>
       </Container>
 
@@ -77,4 +67,4 @@ const AmountView = ({ amount }: { amount: number }) => {
   )
 }
 
-export default Header
+export default observer(Header)
