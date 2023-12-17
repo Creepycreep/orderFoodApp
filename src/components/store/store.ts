@@ -4,8 +4,8 @@ import { Product, ProductList } from "../interfaces/product";
 export default class CartStore {
   constructor() {
     makeAutoObservable(this, {
-      foodList: observable.deep,
-      cartList: observable.deep,
+      foodList: observable,
+      cartList: observable,
       filter: observable,
       searchFilter: observable,
       addInCart: action,

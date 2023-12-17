@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { observer } from "mobx-react-lite"
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
@@ -25,23 +26,23 @@ const Card = ({ product, type = '' }: Props) => {
   const [priceTotal, setPriceTotal] = useState(price);
 
   useEffect(() => {
-    if (amountFood > 0) {
-      setPriceTotal(price * amountFood)
+    if (amount > 0) {
+      setPriceTotal(price * amount)
     }
-  }, [amountFood])
+  }, [amount])
 
   const add = () => {
-    setAmount(1)
+    // setAmount(1)
     cartStore.addInCart({ ...product, amount: 1 })
   }
 
   const update = (a: number) => {
-    setAmount(a)
+    // setAmount(a)
     cartStore.updateCart({ ...product, amount: a })
   }
 
   const remove = () => {
-    setAmount(0)
+    // setAmount(0)
     cartStore.removeOutCart({ ...product, amount: 0 })
   }
 
@@ -63,10 +64,10 @@ const Card = ({ product, type = '' }: Props) => {
 
       <div className={`w-full flex justify-between font-medium ${type === 'cart' ? 'lg:grow items-end lg:w-auto lg:flex-col' : 'items-center min-h-[44px]'}`}>
         {
-          amountFood ?
+          amount ?
             <>
               <Counter
-                value={amountFood}
+                value={amount}
                 updateAmountFood={update}
                 removeAmountFood={remove}
               />
@@ -94,4 +95,4 @@ const Card = ({ product, type = '' }: Props) => {
   )
 }
 
-export default Card
+export default observer(Card)
