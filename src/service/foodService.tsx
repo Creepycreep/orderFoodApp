@@ -1,3 +1,5 @@
+import { initialProduct } from "../components/interfaces/product";
+
 class foodService {
   _apiBase = 'https://my-json-server.typicode.com/creepycreep/fakepizza'
 
@@ -26,7 +28,7 @@ class foodService {
     return data;
   }
 
-  _transformFoodItem = (item: any, category: string) => {
+  _transformFoodItem = (item: initialProduct, category: string) => {
     return {
       category: category,
       id: item.id,

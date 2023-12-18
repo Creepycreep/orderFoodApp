@@ -1,3 +1,13 @@
+export interface initialProduct {
+  description: string,
+  id: number,
+  image: string,
+  ingredients: string[],
+  name: string,
+  price: number,
+  spicy: boolean,
+  vegetarian: boolean,
+}
 export interface Product {
   id: number,
   title: string,

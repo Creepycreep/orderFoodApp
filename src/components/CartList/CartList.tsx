@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import { observer } from "mobx-react-lite"
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -9,16 +9,7 @@ import Button from "../../view/Button/Button"
 import Order from '../../context/CartContext';
 
 const CartList = () => {
-  const [priceTotal, setPriceTotal] = useState(0);
-
-  const { cartList } = useContext(Order);
-  useEffect(() => {
-    setPriceTotal(
-      cartList.reduce((acc: any, sum: any) => {
-        return acc + sum.price * sum.amount;
-      }, 0)
-    )
-  }, [cartList]);
+  const { cartList, totalPrice } = useContext(Order);
 
   return (
     <div className="grow flex flex-col gap-8 pb-6">
@@ -35,7 +26,7 @@ const CartList = () => {
 
       <div className='border-t border-green-800/50 p-3 flex justify-between text-xl'>
         <span>Total</span>
-        <span className='font-medium'>${priceTotal}</span>
+        <span className='font-medium'>${totalPrice}</span>
       </div>
       <Button pad='px-4 py-2'>
         Order

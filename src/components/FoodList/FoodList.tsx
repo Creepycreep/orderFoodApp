@@ -6,11 +6,13 @@ import foodService from '../../service/foodService';
 
 import FoodBlock from '../FoodBlock/FoodBlock';
 import Spinner from '../../components/Spinner/Spinner';
+import Error from '../Error/Error';
 import { ProductList } from '../interfaces/product';
 
 const FoodList = () => {
   const food = new foodService();
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const cartStore = useContext(Order)
 
   useEffect(() => {
@@ -22,25 +24,21 @@ const FoodList = () => {
     food.getAllFood()
       .then((res) => {
         cartStore.loadFoodList(res);
+      })
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+        setIsError(true);
+      })
+      .finally(() => {
         setIsLoading(false);
       })
   }
 
-  const searchFilterData = cartStore.searchFilter === '' ? cartStore.foodList : cartStore.foodList.reduce((sum: any, item: { foodList: any[]; }) => {
-    const exp = item.foodList.filter((foodPos: { title: string; }) => foodPos.title.toLowerCase().includes(cartStore.searchFilter.toLowerCase()))
-
-    if (exp.length > 0) {
-      return [...sum, { ...item, foodList: exp }]
-    }
-
-    return sum
-  }, [])
-
-  const list = cartStore.filter === '' ? searchFilterData : searchFilterData.filter((item: { category: string; }) => item.category === cartStore.filter);
-
   return (
     <>
-      {isLoading ? <Spinner /> : list.map((item: ProductList) => {
+      {isError ? <Error /> : null}
+      {isLoading ? <Spinner /> : cartStore.filteredFoodList.map((item: ProductList) => {
         return <FoodBlock
           key={item.category}
           productList={item}

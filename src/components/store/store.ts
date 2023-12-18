@@ -1,26 +1,66 @@
-import { makeAutoObservable, observable, action } from "mobx"
+import { makeAutoObservable, observable, action, computed } from "mobx"
 import { Product, ProductList } from "../interfaces/product";
 
 export default class CartStore {
   constructor() {
     makeAutoObservable(this, {
       foodList: observable,
+      loadFoodList: action,
+      updateAmount: action,
+
       cartList: observable,
-      filter: observable,
-      searchFilter: observable,
       addInCart: action,
       removeOutCart: action,
       updateCart: action,
-      loadFoodList: action,
-      updateAmount: action,
+
+      badgeFilter: observable,
       updateFilter: action,
+
+      searchFilter: observable,
       updateSearchFilter: action,
+
+      totalPrice: computed,
+      filteredFoodList: computed,
     })
   }
 
-  filter = ''
+  get totalPrice() {
+    return this.cartList.reduce((acc: number, sum: Product) => {
+      return acc + sum.price * sum.amount;
+    }, 0)
+  }
+
+  get filteredFoodList() {
+    let list = [];
+
+    if (this.searchFilter === '' && this.badgeFilter === '') {
+      return this.foodList
+    }
+
+    if (this.searchFilter === '') {
+      list = this.foodList
+    }
+
+    list = this.foodList.reduce((sum: any, item: { foodList: any[]; }) => {
+      const exp = item.foodList.filter((foodPos: { title: string; }) => foodPos.title.toLowerCase().includes(this.searchFilter.toLowerCase()))
+
+      if (exp.length > 0) {
+        return [...sum, { ...item, foodList: exp }]
+      }
+
+      return sum
+    }, [])
+
+    if (this.badgeFilter === '') {
+      return list
+    }
+
+    return list.filter((item: { category: string; }) => item.category === this.badgeFilter);
+  }
+
+  badgeFilter = ''
   updateFilter(category: string) {
-    this.filter = category;
+    this.badgeFilter = category;
   }
 
   searchFilter = ''
@@ -29,11 +69,9 @@ export default class CartStore {
   }
 
   foodList: Array<ProductList> = []
-
   loadFoodList(arr: Array<ProductList>) {
     this.foodList = arr;
   }
-
   updateAmount(product: Product) {
     const block = this.foodList.findIndex(elem => {
       return elem.category === product.category
@@ -47,7 +85,6 @@ export default class CartStore {
   }
 
   cartList: Array<Product> = []
-
   addInCart(product: Product) {
     this.cartList.push(product);
     this.updateAmount(product)
@@ -58,7 +95,7 @@ export default class CartStore {
       return !(product.id === item.id && product.category === item.category);
     })
 
-    this.updateAmount(product)
+    this.updateAmount(product);
   }
 
   updateCart(product: Product) {

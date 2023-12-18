@@ -30,17 +30,14 @@ const Card = ({ product, type = '' }: Props) => {
   }, [amount])
 
   const add = () => {
-    // setAmount(1)
     cartStore.addInCart({ ...product, amount: 1 })
   }
 
-  const update = (a: number) => {
-    // setAmount(a)
-    cartStore.updateCart({ ...product, amount: a })
+  const update = (amount: number) => {
+    cartStore.updateCart({ ...product, amount })
   }
 
   const remove = () => {
-    // setAmount(0)
     cartStore.removeOutCart({ ...product, amount: 0 })
   }
 

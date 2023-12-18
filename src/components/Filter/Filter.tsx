@@ -13,16 +13,13 @@ import Badge from "../../view/Badge/Badge"
 
 const Filter = () => {
   const cartStore = useContext(Order);
-  const filter = cartStore.filter;
-
-  const categories = cartStore.foodList.map((item: { category: any; }) => item.category)
-
+  const categories = cartStore.foodList.map((item: { category: string; }) => item.category)
 
   return (
     <div className='flex gap-4 flex-wrap'>
       <Badge
         click={() => cartStore.updateFilter('')}
-        isActive={filter === ''}
+        isActive={cartStore.badgeFilter === ''}
       >
         <FastfoodOutlinedIcon />
         <span className='text-capitalize'>All</span>
@@ -51,7 +48,7 @@ const Filter = () => {
             <Badge
               click={() => cartStore.updateFilter(category)}
               key={category}
-              isActive={filter === category}
+              isActive={cartStore.badgeFilter === category}
             >
               {icon}
               <span className='capitalize'>{category}</span>
