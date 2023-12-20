@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { observer } from "mobx-react-lite"
 
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
@@ -8,82 +9,37 @@ import Order from '../../context/CartContext';
 
 import Counter from "../Counter/Counter";
 import Button from "../../view/Button/Button";
+import { Product } from '../interfaces/product';
 
 type Props = {
-  foodData: {
-    id: number,
-    title: string,
-    price: number,
-    spicy?: boolean,
-    veg?: boolean,
-    image: string,
-    category: string,
-  },
+  product: Product,
   type?: string,
   amountInit?: number,
-  addItem: React.Dispatch<React.SetStateAction<any[]>>
 }
 
-const Card = ({ foodData, addItem, type = '', amountInit = 0 }: Props) => {
-  const { title, price, spicy, veg, image, category, id } = foodData;
-  const { orderList } = useContext(Order);
+const Card = ({ product, type = '' }: Props) => {
+  const { title, price, spicy, veg, image, amount } = product;
 
-  const [amount, setAmount] = useState(amountInit);
+  const cartStore = useContext(Order);
   const [priceTotal, setPriceTotal] = useState(price);
 
   useEffect(() => {
     if (amount > 0) {
-      addItem((state: any) => {
-        const newState = state.filter((item: { id: number; category: string; }) => {
-          if (!(item.id === id && item.category === category)) {
-            return item
-          }
-        });
-
-        return [
-          ...newState,
-          {
-            category: category,
-            id: foodData.id,
-            amount: amount,
-            title: title,
-            image: image,
-            price: price,
-          }
-        ]
-      })
       setPriceTotal(price * amount)
-    } else {
-      addItem((state: any) => {
-        return state.filter((item: { id: number; category: string; }) => !(item.id === id && item.category === category))
-      })
-      setPriceTotal(price)
     }
+  }, [amount])
 
-  }, [amount]);
+  const add = () => {
+    cartStore.addInCart({ ...product, amount: 1 })
+  }
 
-  useEffect(() => {
-    const cacheAmount = orderList.reduce((acc: any, sum: { id: number; category: string; amount: number }) => {
-      if (sum.id === id && sum.category === category) {
-        return sum.amount
-      }
+  const update = (amount: number) => {
+    cartStore.updateCart({ ...product, amount })
+  }
 
-      return acc;
-    }, 0);
-
-    setAmount(state => {
-      if (!cacheAmount) {
-        return 0;
-      }
-
-      if (cacheAmount !== state) {
-        return cacheAmount;
-      } else {
-        return amount;
-      }
-    })
-
-  }, [orderList]);
+  const remove = () => {
+    cartStore.removeOutCart({ ...product, amount: 0 })
+  }
 
   return (
     <div className={`flex flex-col relative items-center flex-nowrap gap-4 text-green-800 ${type === 'cart' ? 'lg:flex-row lg:items-stretch w-full lg:min-h-[88px]' : ''}`}>
@@ -105,12 +61,16 @@ const Card = ({ foodData, addItem, type = '', amountInit = 0 }: Props) => {
         {
           amount ?
             <>
-              <Counter value={amount} setAmountFood={setAmount} />
+              <Counter
+                value={amount}
+                updateAmountFood={update}
+                removeAmountFood={remove}
+              />
               <Button
-                onClick={() => setAmount(0)}
                 type='icon'
                 color='text-green-800 hover:text-green-600'
                 pad='p-0'
+                onClick={remove}
               >
                 <DeleteOutlinedIcon sx={{ fontSize: 28 }} />
               </Button>
@@ -118,7 +78,7 @@ const Card = ({ foodData, addItem, type = '', amountInit = 0 }: Props) => {
             :
             <>
               <Button
-                onClick={() => setAmount(1)}
+                onClick={add}
                 pad='px-4 py-2'>
                 Order
                 <ShoppingCartIcon />
@@ -130,4 +90,4 @@ const Card = ({ foodData, addItem, type = '', amountInit = 0 }: Props) => {
   )
 }
 
-export default Card
+export default observer(Card)

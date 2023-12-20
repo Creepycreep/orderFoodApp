@@ -1,7 +1,7 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
+import { observer } from "mobx-react-lite"
 
 import LocalPizzaRoundedIcon from '@mui/icons-material/LocalPizzaRounded';
-import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
@@ -9,29 +9,14 @@ import Container from '../../view/Container/Container';
 import Cart from '../Cart/Cart';
 import Button from '../../view/Button/Button';
 import Order from '../../context/CartContext';
+import Search from '../Search/Search';
 
-const Header = ({ setSeachFilter }: { setSeachFilter: React.Dispatch<React.SetStateAction<string>> }) => {
-
+const Header = () => {
   const [isCartActive, setIsCartActive] = useState(false);
-  const [orderAmount, setOrderAmount] = useState(0);
-  const [searchValue, setSearchValue] = useState('');
-
-  const { orderList } = useContext(Order);
-
-  useEffect(() => {
-    setOrderAmount(orderList.length)
-  }, [orderList])
-
-  useEffect(() => {
-    setSeachFilter(searchValue)
-  }, [searchValue])
+  const { cartList } = useContext(Order);
 
   const onCartTriggerHandler = () => {
     setIsCartActive(prev => !prev)
-  }
-
-  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
   }
 
   return (
@@ -41,18 +26,7 @@ const Header = ({ setSeachFilter }: { setSeachFilter: React.Dispatch<React.SetSt
           <LocalPizzaRoundedIcon sx={{ color: '#ffac72' }} />
           PizzaYummy
         </div>
-
-        <form onSubmit={(e) => { e.preventDefault() }} className=" lg:w-1/2 search flex lg:bg-green-100 rounded-xl lg:mr-4">
-          <button className='hidden lg:block text-green-100 lg:text-green-700 bg-transparent p-2'>
-            <SearchIcon />
-          </button>
-          <input
-            onChange={onChangeHandler}
-            value={searchValue}
-            className='hidden lg:block  w-full form-input p-2 pl-0 bg-transparent  border-transparent placeholder:text-green-700/50 text-green-700 focus:border-transparent focus:ring-0'
-            type="text"
-            placeholder='What would you like to eat today?' />
-        </form>
+        <Search />
 
         <Button
           type='icon'
@@ -60,7 +34,7 @@ const Header = ({ setSeachFilter }: { setSeachFilter: React.Dispatch<React.SetSt
           color='text-green-100 hover:text-green-300 relative'
         >
           {isCartActive ? <CloseIcon /> : <ShoppingCartIcon />}
-          {orderAmount ? <AmountView amount={orderAmount} /> : null}
+          {cartList.length ? <AmountView amount={cartList.length} /> : null}
         </Button>
       </Container>
 
@@ -77,4 +51,4 @@ const AmountView = ({ amount }: { amount: number }) => {
   )
 }
 
-export default Header
+export default observer(Header)

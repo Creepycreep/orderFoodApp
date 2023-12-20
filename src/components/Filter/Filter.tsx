@@ -1,3 +1,8 @@
+import { useContext } from 'react';
+import { observer } from "mobx-react-lite"
+
+import Order from '../../context/CartContext';
+
 import FastfoodOutlinedIcon from '@mui/icons-material/FastfoodOutlined';
 import LocalPizzaOutlinedIcon from '@mui/icons-material/LocalPizzaOutlined';
 import WaterDropOutlinedIcon from '@mui/icons-material/WaterDropOutlined';
@@ -6,23 +11,22 @@ import DinnerDiningOutlinedIcon from '@mui/icons-material/DinnerDiningOutlined';
 
 import Badge from "../../view/Badge/Badge"
 
-type Props = {
-  categories: string[],
-  setFilter: React.Dispatch<React.SetStateAction<any>>,
-  selectedFilter: string,
-}
-const Filter = ({ categories, setFilter, selectedFilter }: Props) => {
+const Filter = () => {
+  const cartStore = useContext(Order);
+  const categories = cartStore.foodList.map((item: { category: string; }) => item.category)
+
   return (
     <div className='flex gap-4 flex-wrap'>
       <Badge
-        click={() => setFilter('')}
-        isActive={selectedFilter === ''}>
+        click={() => cartStore.updateFilter('')}
+        isActive={cartStore.badgeFilter === ''}
+      >
         <FastfoodOutlinedIcon />
         <span className='text-capitalize'>All</span>
       </Badge>
 
       {
-        categories.map(category => {
+        categories.map((category: string) => {
           let icon = null;
           switch (category) {
             case 'pizza':
@@ -42,9 +46,10 @@ const Filter = ({ categories, setFilter, selectedFilter }: Props) => {
           }
           return (
             <Badge
-              click={() => setFilter(category)}
+              click={() => cartStore.updateFilter(category)}
               key={category}
-              isActive={selectedFilter === category}>
+              isActive={cartStore.badgeFilter === category}
+            >
               {icon}
               <span className='capitalize'>{category}</span>
             </Badge>
@@ -55,4 +60,4 @@ const Filter = ({ categories, setFilter, selectedFilter }: Props) => {
   )
 }
 
-export default Filter
+export default observer(Filter)
